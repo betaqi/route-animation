@@ -17,7 +17,7 @@ export const createFloating = (component: Component) => {
           transition: 'all 1s ease-in-out',
           top: `${top.value}px`,
           left: `${left.value}px`,
-          display: `${island.value ? 'none' : 'block'}`,
+          display: `${island.value ? 'none' : 'block'}`
         }
       })
       const cleanRouterGuard = router.beforeEach(async () => {

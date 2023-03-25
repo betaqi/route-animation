@@ -1,66 +1,122 @@
 import { Component, StyleValue, Teleport } from 'vue'
 import { defineComponent } from 'vue'
+import { StarporContext, createStarporContext } from './context'
+import { nanoid } from './utils'
+export function createStarport<T extends Component>(component: T) {
+  const contextMap = new Map<string, StarporContext>()
+  const defaultId = nanoid()
 
-export const createFloating = (component: Component) => {
-  const attrs = ref()
-  const proxyEl = ref<HTMLElement>()
+  function getContext(port = defaultId) {
+    if (!contextMap.has(port)) {
+      contextMap.set(port, createStarporContext(port))
+    }
 
-  let { top, left } = useElementBounding(proxyEl)
-  const island = ref(false)
+    return contextMap.get(port)!
+  }
+
   const Container = defineComponent({
-    setup() {
+    props: {
+      port: {
+        type: String,
+        default: defaultId
+      }
+    },
+    setup(props) {
       const router = useRouter()
+      const context = computed(() => {
+
+        return getContext(props.port)
+      })
+
       const Style = computed((): StyleValue => {
-        if (!proxyEl.value) return { display: 'none' }
-        return {
+        const rect = context.value.rect
+        const style: StyleValue = {
           position: 'fixed',
-          transition: 'all 1s ease-in-out',
-          top: `${top.value}px`,
-          left: `${left.value}px`,
-          display: `${island.value ? 'none' : 'block'}`
+          top: `${rect.top}px`,
+          left: `${rect.left}px`,
+          width: `${rect.width}px`,
+          height: `${rect.height}px`
         }
+        if (!context.value.el) {
+          return {
+            ...style,
+            display: 'none'
+          }
+        }
+        if (context.value.isLanded)
+          style.pointerEvents = 'none'
+        else
+          style.transition = 'all 1s ease-in-out'
+        return style
       })
       const cleanRouterGuard = router.beforeEach(async () => {
-        island.value = false
+        context.value.fly()
         await nextTick()
       })
 
       onBeforeUnmount(() => {
         cleanRouterGuard()
       })
-      const transitionAttrs = ref([])
-      const counter = ref(0)
+
 
 
       return () => h(
         'div', {
-        style: Style.value, id: 'container',
+        style: Style.value,
         onTransitionstart: (e: { propertyName: never }) => {
-          transitionAttrs.value.push(e.propertyName)
+          context.value.transitionAttrsOPN().addAttr(e.propertyName)
         },
         onTransitionend: async () => {
-          counter.value++
-          if (counter.value === transitionAttrs.value.length) {
+          context.value.transitionAttrsOPN().addCount()
+          if (
+            context.value.transitionAttrsOPN().getLength()
+            === context.value.transitionAttrsOPN().getCount()
+          ) {
             await nextTick()
-            island.value = true
-            transitionAttrs.value = []
-            counter.value = 0
+            context.value.Land()
+            context.value.transitionAttrsOPN().reset()
           }
         }
       },
         h(Teleport,
-          { to: island.value ? '#proxy' : 'body', disabled: !island.value },
-          h(component, attrs.value)
+          { to: context.value.isLanded ? `#${context.value.id}` : 'body', disabled: !context.value.isLanded },
+          h(component, context.value.attr)
         )
       )
     },
 
   })
   const Proxy = defineComponent({
-    setup() {
-      const attr = useAttrs()
-      attrs.value = attr
-      return () => h('div', { ref: proxyEl, id: 'proxy' })
+    props: {
+      port: {
+        type: String,
+        default: defaultId
+      },
+      props: {
+        type: Object,
+        default: () => { }
+      },
+      attrs: {
+        type: Object,
+        default: () => { }
+      }
+    },
+    setup(props, ctx) {
+      const context = computed(() => getContext(props.port))
+      context.value.attr = useAttrs()
+      context.value.props = props.props
+      const el = context.value.elRef()
+      return () => h(
+        'div',
+        {
+          ref: el,
+          class: 'proxy',
+          id: context.value.id
+        },
+        ctx.slots.default
+          ? h(ctx.slots.default)
+          : undefined
+      )
     },
   })
 

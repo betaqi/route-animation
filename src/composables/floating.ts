@@ -6,9 +6,9 @@ export function createStarport<T extends Component>(component: T) {
   const contextMap = new Map<string, StarporContext>()
   const defaultId = nanoid()
 
-  function getContext(port = defaultId) {
+  function getStarporContext(port = defaultId) {
     if (!contextMap.has(port)) {
-      contextMap.set(port, createStarporContext(port))
+      contextMap.set(port, createStarporContext())
     }
 
     return contextMap.get(port)!
@@ -23,10 +23,7 @@ export function createStarport<T extends Component>(component: T) {
     },
     setup(props) {
       const router = useRouter()
-      const context = computed(() => {
-
-        return getContext(props.port)
-      })
+      const context = computed(() => getStarporContext(props.port))
 
       const Style = computed((): StyleValue => {
         const rect = context.value.rect
@@ -43,14 +40,16 @@ export function createStarport<T extends Component>(component: T) {
             display: 'none'
           }
         }
-        if (context.value.isLanded)
+        if (context.value.isLanded){
           style.pointerEvents = 'none'
+          style.display= 'none'
+        }
         else
           style.transition = 'all 1s ease-in-out'
         return style
       })
       const cleanRouterGuard = router.beforeEach(async () => {
-        context.value.fly()
+        await context.value.fly()
         await nextTick()
       })
 
@@ -60,29 +59,36 @@ export function createStarport<T extends Component>(component: T) {
 
 
 
-      return () => h(
-        'div', {
-        style: Style.value,
-        onTransitionstart: (e: { propertyName: never }) => {
-          context.value.transitionAttrsOPN().addAttr(e.propertyName)
-        },
-        onTransitionend: async () => {
-          context.value.transitionAttrsOPN().addCount()
-          if (
-            context.value.transitionAttrsOPN().getLength()
-            === context.value.transitionAttrsOPN().getCount()
-          ) {
-            await nextTick()
-            context.value.Land()
-            context.value.transitionAttrsOPN().reset()
+      return () => {
+        const comp = h(component, { ...context.value.props, ...context.value.attr })
+        const teleport = !!(context.value.isLanded && context.value.el)
+        return h(
+          'div', {
+          style: Style.value,
+          class: 'container',
+          id: `${context.value.id}`,
+          onTransitionstart: (e: { propertyName: never }) => {
+            console.log(e)
+            context.value.transitionAttrsOPN().addAttr(e.propertyName)
+          },
+          onTransitionend: async () => {
+            context.value.transitionAttrsOPN().addCount()
+            if (
+              context.value.transitionAttrsOPN().getLength()
+              === context.value.transitionAttrsOPN().getCount()
+            ) {
+              await nextTick()
+              await context.value.Land()
+              context.value.transitionAttrsOPN().reset()
+            }
           }
-        }
-      },
-        h(Teleport,
-          { to: context.value.isLanded ? `#${context.value.id}` : 'body', disabled: !context.value.isLanded },
-          h(component, context.value.attr)
+        },
+          h(Teleport,
+            { to: teleport ? `#proxy-${context.value.id}` : 'body', disabled: !context.value.isLanded },
+            comp
+          )
         )
-      )
+      }
     },
 
   })
@@ -102,16 +108,15 @@ export function createStarport<T extends Component>(component: T) {
       }
     },
     setup(props, ctx) {
-      const context = computed(() => getContext(props.port))
-      context.value.attr = useAttrs()
+      const context = computed(() => getStarporContext(props.port))
+      context.value.attr = props.attrs
       context.value.props = props.props
       const el = context.value.elRef()
       return () => h(
         'div',
         {
           ref: el,
-          class: 'proxy',
-          id: context.value.id
+          id: `proxy-${context.value.id}`
         },
         ctx.slots.default
           ? h(ctx.slots.default)

@@ -1,8 +1,8 @@
 import type { UseElementBoundingReturn } from '@vueuse/core'
 import { nanoid } from './utils'
 import type { Ref } from 'vue'
-export function createStarporContext(port: string) {
-  const id = ref(port ?? nanoid())
+export function createStarporContext() {
+  const id = ref(nanoid())
   const el: Ref<HTMLElement | undefined> = ref()
   let rect: UseElementBoundingReturn = undefined!
 
@@ -31,10 +31,12 @@ export function createStarporContext(port: string) {
     elRef() {
       return el
     },
-    fly() {
+    async fly() {
+      if (!isLanded.value) return
       isLanded.value = false
     },
-    Land() {
+    async Land() {
+      if (isLanded.value) return
       isLanded.value = true
     },
     transitionAttrsOPN() {

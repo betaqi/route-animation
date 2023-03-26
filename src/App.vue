@@ -6,6 +6,9 @@ import { Container } from '~/composables/image'
   <main font-sans text="center gray-700 dark:gray-200">
     <TheNav />
     <RouterView />
-    <Container />
+    <Container port="0"/>
+    <Container port="1"/>
+    <Container port="2"/>
+    <Container port="3"/>
   </main>
 </template>

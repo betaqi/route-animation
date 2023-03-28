@@ -4,10 +4,9 @@ import { images } from '~/composables/data'
 </script>
 
 <template>
-  <div flex="~ gap-4 wrap">
-    <Proxy
-      v-for="(img, idx) in images" :key="idx"
-      :port="String(idx)" :props="{ src: img }"
-      :attrs="{ class: 'w-50 h-50' }" />
+  <div flex="~ gap-4 wrap" justify-center>
+    <RouterLink v-for="(img, idx) in images" :key="idx" :to="`/${idx}`">
+      <Proxy :port="String(idx)" :props="{ src: img }" w-50 h-50 />
+    </RouterLink>
   </div>
 </template>

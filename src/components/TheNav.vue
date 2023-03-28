@@ -11,9 +11,6 @@ const router = useRoute()
       <RouterLink to="/" btn>
         /
       </RouterLink>
-      <RouterLink to="/foo" btn>
-        /foo
-      </RouterLink>
       <RouterLink to="/bar" btn>
         Bar
       </RouterLink>

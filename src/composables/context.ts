@@ -17,6 +17,13 @@ export function createStarporContext() {
   const scope = effectScope(true)
   scope.run(() => {
     rect = useElementBounding(el)
+    watch(el, async (v) => {
+      if (v)
+        isVisible.value = true
+      await nextTick()
+      if (!el.value)
+        isVisible.value = false
+    })
   })
 
   return reactive({

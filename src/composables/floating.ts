@@ -34,22 +34,29 @@ export function createStarport<T extends Component>(component: T) {
           width: `${rect.width}px`,
           height: `${rect.height}px`
         }
+        if (!context.value.isVisible || !context.value.el) {
+          return {
+            ...style,
+            // zIndex: -1,
+            display: 'none',
+          }
+        }
         if (!context.value.el) {
           return {
             ...style,
             display: 'none'
           }
         }
-        if (context.value.isLanded){
+        if (context.value.isLanded) {
           style.pointerEvents = 'none'
-          style.display= 'none'
+          style.display = 'none'
         }
         else
           style.transition = 'all 1s ease-in-out'
         return style
       })
       const cleanRouterGuard = router.beforeEach(async () => {
-        await context.value.fly()
+        context.value.fly()
         await nextTick()
       })
 
@@ -68,7 +75,6 @@ export function createStarport<T extends Component>(component: T) {
           class: 'container',
           id: `${context.value.id}`,
           onTransitionstart: (e: { propertyName: never }) => {
-            console.log(e)
             context.value.transitionAttrsOPN().addAttr(e.propertyName)
           },
           onTransitionend: async () => {
@@ -112,6 +118,15 @@ export function createStarport<T extends Component>(component: T) {
       context.value.attr = props.attrs
       context.value.props = props.props
       const el = context.value.elRef()
+      // 第一次出现直接落地
+      if (!context.value.isVisible) {
+        context.value.Land()
+      }
+
+      onBeforeUnmount(() => {
+        context.value.rect.update()
+      })
+
       return () => h(
         'div',
         {

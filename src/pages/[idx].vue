@@ -37,6 +37,6 @@ function RestSize() {
       las ultimas espcificaciones estables de CSS
     </p>
     <Proxy :style="{ width: `${size}px`, height: `${size}px` }" :port="idx" :props="{ src: images[Number(idx)] }"
-      :attrs="{ class: 'rounded-full hfull wfull' }" transition-all />
+      :attrs="{ class: 'rounded-1/2' }" transition-all />
   </div>
 </template>

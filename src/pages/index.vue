@@ -6,7 +6,7 @@ import { images } from '~/composables/data'
 <template>
   <div flex="~ gap-4 wrap" justify-center>
     <RouterLink v-for="(img, idx) in images" :key="idx" :to="`/${idx}`">
-      <Proxy :port="String(idx)" :props="{ src: img }" w-50 h-50 />
+      <Proxy :port="String(idx)" :props="{ src: img }" w-100 h-50 />
     </RouterLink>
   </div>
 </template>

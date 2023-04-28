@@ -11,8 +11,6 @@ export function createStarporContext() {
   const isVisible = ref(false)
   const isLanded: Ref<boolean> = ref(false)
 
-  const transitionAttrs: Ref<string[]> = ref([])
-  const transitionendCounter = ref(0)
 
   const scope = effectScope(true)
   scope.run(() => {
@@ -46,27 +44,6 @@ export function createStarporContext() {
       if (isLanded.value) return
       isLanded.value = true
     },
-    transitionAttrsOPN() {
-      return {
-        addCount() {
-          transitionendCounter.value++
-        },
-        reset() {
-          transitionAttrs.value = []
-          transitionendCounter.value = 0
-        },
-        getLength() {
-          return transitionAttrs.value.length
-        },
-        getCount() {
-          return transitionendCounter.value
-        },
-        addAttr(attr: string) {
-          transitionAttrs.value.push(attr)
-        }
-
-      }
-    }
   })
 }
 

@@ -77,19 +77,12 @@ export function createStarport<T extends Component>(component: T) {
           style: Style.value,
           class: 'container',
           id: `${context.value.id}`,
-          onTransitionstart: (e: { propertyName: never }) => {
-            context.value.transitionAttrsOPN().addAttr(e.propertyName)
+          onTransitionstart: () => {
+            context.value.fly()
           },
           onTransitionend: async () => {
-            context.value.transitionAttrsOPN().addCount()
-            if (
-              context.value.transitionAttrsOPN().getLength()
-              === context.value.transitionAttrsOPN().getCount()
-            ) {
-              await nextTick()
-              await context.value.Land()
-              context.value.transitionAttrsOPN().reset()
-            }
+            await nextTick()
+            context.value.Land()
           }
         },
           h(Teleport,

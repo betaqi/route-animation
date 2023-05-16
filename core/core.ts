@@ -1,6 +1,6 @@
 import { Component, renderList, StyleValue, Teleport } from 'vue'
 import { defineComponent } from 'vue'
-import { StarporContext, createStarporContext } from './context'
+import { StarporContext, createStarportContext } from './context'
 import { nanoid } from './utils'
 export function createStarport<T extends Component>(component: T) {
   const contextMap = new Map<string, StarporContext>()
@@ -11,13 +11,13 @@ export function createStarport<T extends Component>(component: T) {
   function getStarporContext(port = defaultId) {
     if (!contextMap.has(port)) {
       counter.value +=1
-      contextMap.set(port, createStarporContext())
+      contextMap.set(port, createStarportContext())
     }
 
     return contextMap.get(port)!
   }
 
-  const Container = defineComponent({
+  const starcraft = defineComponent({
     props: {
       port: {
         type: String,
@@ -143,7 +143,7 @@ export function createStarport<T extends Component>(component: T) {
         counter.value
         return renderList(
           Array.from(contextMap.keys()),
-          prot => h(Container, { port: prot, key: prot })
+          prot => h(starcraft, { port: prot, key: prot })
         )
       }
     }

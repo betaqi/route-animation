@@ -1,8 +1,4 @@
-import { createStarport } from '../../core/core'
+import { getStarportCarrier } from '../../core/index'
 import TheImage from '~/components/TheImage.vue'
-const { Proxy, Carrier } = createStarport(TheImage)
 
-export {
-  Proxy,
-  Carrier,
-}
+export const TheImageCarrier = getStarportCarrier(TheImage)

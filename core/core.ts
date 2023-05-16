@@ -2,6 +2,25 @@ import { Component, renderList, StyleValue, Teleport } from 'vue'
 import { defineComponent } from 'vue'
 import { StarporContext, createStarportContext } from './context'
 import { nanoid } from './utils'
+type StarportInstance = ReturnType<typeof createStarport>
+
+const componetMap = new Map<Component, StarportInstance>()
+
+export function getStarportProxy<T extends Component>(component: T) {
+  if (!componetMap.has(component)) {
+    console.log('not component')
+    componetMap.set(component, createStarport(component))
+  }
+  console.log(componetMap)
+  return componetMap.get(component)!.Proxy
+}
+
+export function getStarportCarrier<T extends Component>(componet: T) {
+  if (!componetMap.has(componet))
+    componetMap.set(componet, createStarport(componet))
+  return componetMap.get(componet)!.Carrier
+}
+
 export function createStarport<T extends Component>(component: T) {
   const contextMap = new Map<string, StarporContext>()
   const defaultId = nanoid()
@@ -10,7 +29,7 @@ export function createStarport<T extends Component>(component: T) {
 
   function getStarporContext(port = defaultId) {
     if (!contextMap.has(port)) {
-      counter.value +=1
+      counter.value += 1
       contextMap.set(port, createStarportContext())
     }
 

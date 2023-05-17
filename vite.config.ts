@@ -8,6 +8,7 @@ import Components from 'unplugin-vue-components/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import Unocss from 'unocss/vite'
 import VueMacros from 'unplugin-vue-macros/vite'
+import VueDevTools from 'vite-plugin-vue-devtools'
 
 export default defineConfig({
   resolve: {
@@ -23,6 +24,7 @@ export default defineConfig({
         }),
       },
     }),
+    VueDevTools(),
 
     // https://github.com/hannoeru/vite-plugin-pages
     Pages(),

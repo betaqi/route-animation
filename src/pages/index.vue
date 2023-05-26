@@ -11,4 +11,9 @@ import { StarportProxy } from '../../core/index'
       </StarportProxy>
     </RouterLink>
   </div>
+  <div flex justify-center mt20>
+    <StarportProxy >
+      <Theme />
+    </StarportProxy>
+  </div>
 </template>

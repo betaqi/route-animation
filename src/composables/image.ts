@@ -1,4 +1,4 @@
-import { getStarportCarrier } from '../../core/index'
-import TheImage from '~/components/TheImage.vue'
+// import { getStarportCarrier } from '../../core/index'
+// import TheImage from '~/components/TheImage.vue'
 
-export const TheImageCarrier = getStarportCarrier(TheImage)
+// export const TheImageCarrier = getStarportCarrier(TheImage)

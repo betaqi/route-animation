@@ -1,5 +1,16 @@
-import { defineComponent } from 'vue'
-import { getStarportProxy } from './core'
+import { defineComponent, renderList } from 'vue'
+import { componetMap, compCarrierMapCounter, getStarportCarrier, getStarportProxy } from './core'
+
+export const StarportCarrier = defineComponent({
+  name: 'StarportCarrier',
+  render() {
+    compCarrierMapCounter.value
+    return renderList(
+      Array.from(componetMap.keys()),
+      (comp, idx) => h(getStarportCarrier(comp), { key: idx })
+    )
+  }
+})
 
 export const StarportProxy = defineComponent({
   name: 'StarportProxy',

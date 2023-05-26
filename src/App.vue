@@ -1,11 +1,11 @@
 <script setup>
-import { TheImageCarrier } from '~/composables/image'
+import { StarportCarrier } from '../core/components'
 </script>
 
 <template>
   <main font-sans text="center gray-700 dark:gray-200">
     <TheNav />
     <RouterView />
-    <TheImageCarrier />
+    <StarportCarrier />
   </main>
 </template>

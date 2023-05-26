@@ -4,22 +4,27 @@ import { StarporContext, createStarportContext } from './context'
 import { nanoid } from './utils'
 type StarportInstance = ReturnType<typeof createStarport>
 
-const componetMap = new Map<Component, StarportInstance>()
+export const compCarrierMapCounter = ref(0)
+
+export const componetMap = new Map<Component, StarportInstance>()
+
+
+export function getStarportCarrier<T extends Component>(componet: T) {
+  if (!componetMap.has(componet)) {
+    compCarrierMapCounter.value += 1
+    componetMap.set(componet, createStarport(componet))
+  }
+  return componetMap.get(componet)!.Carrier
+}
 
 export function getStarportProxy<T extends Component>(component: T) {
   if (!componetMap.has(component)) {
-    console.log('not component')
+    compCarrierMapCounter.value += 1
     componetMap.set(component, createStarport(component))
   }
-  console.log(componetMap)
   return componetMap.get(component)!.Proxy
 }
 
-export function getStarportCarrier<T extends Component>(componet: T) {
-  if (!componetMap.has(componet))
-    componetMap.set(componet, createStarport(componet))
-  return componetMap.get(componet)!.Carrier
-}
 
 export function createStarport<T extends Component>(component: T) {
   const contextMap = new Map<string, StarporContext>()

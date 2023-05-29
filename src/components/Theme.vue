@@ -36,7 +36,7 @@ function toggle(event: MouseEvent) {
 </script>
 
 <template>
-  <div>
+  <div flex items-center>
     <div @click="toggle">
       <svg class="sun-and-moon" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24">
         <mask class="moon" id="moon-mask">
@@ -56,5 +56,7 @@ function toggle(event: MouseEvent) {
         </g>
       </svg>
     </div>
+    <a i-carbon-logo-github ml2 rel="noreferrer" href="https://github.com/betaqi/route-animation" target="_blank"
+      title="GitHub" />
   </div>
 </template>

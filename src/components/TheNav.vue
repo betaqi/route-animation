@@ -9,7 +9,7 @@ const router = useRoute()
       {{ router.path }}
     </div>
     <div>
-      <StarportProxy w-24px h-24px v-if="router.path !== '/'">
+      <StarportProxy w-50px h-24px v-if="router.path !== '/'">
         <Theme />
       </StarportProxy>
     </div>

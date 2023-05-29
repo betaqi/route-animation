@@ -12,7 +12,7 @@ import { StarportProxy } from '../../core/index'
     </RouterLink>
   </div>
   <div flex justify-center mt20>
-    <StarportProxy w-24px h-24px>
+    <StarportProxy w-50px h-24px>
       <Theme />
     </StarportProxy>
   </div>

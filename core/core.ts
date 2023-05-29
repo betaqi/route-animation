@@ -1,8 +1,8 @@
-import { Component, renderList, StyleValue, Teleport } from 'vue'
-import { defineComponent } from 'vue'
+import type { Component, StyleValue } from 'vue'
+import type { StarportOptions, ResolvedStarportOptions, StarportInstance } from './type'
+import { defineComponent, renderList, Teleport } from 'vue'
 import { StarporContext, createStarportContext } from './context'
 import { nanoid } from './utils'
-type StarportInstance = ReturnType<typeof createStarport>
 
 export const compCarrierMapCounter = ref(0)
 
@@ -14,7 +14,7 @@ export function getStarportCarrier<T extends Component>(componet: T) {
     compCarrierMapCounter.value += 1
     componetMap.set(componet, createStarport(componet))
   }
-  return componetMap.get(componet)!.Carrier
+  return componetMap.get(componet)!.carrier
 }
 
 export function getStarportProxy<T extends Component>(component: T) {
@@ -22,11 +22,20 @@ export function getStarportProxy<T extends Component>(component: T) {
     compCarrierMapCounter.value += 1
     componetMap.set(component, createStarport(component))
   }
-  return componetMap.get(component)!.Proxy
+  return componetMap.get(component)!.proxy
 }
 
 
-export function createStarport<T extends Component>(component: T) {
+export function createStarport<T extends Component>(
+  component: T,
+  options: StarportOptions = {},
+): StarportInstance {
+
+  const resolved: ResolvedStarportOptions = {
+    duration: 800,
+    ...options
+  }
+
   const contextMap = new Map<string, StarporContext>()
   const defaultId = nanoid()
 
@@ -79,7 +88,7 @@ export function createStarport<T extends Component>(component: T) {
           style.display = 'none'
         }
         else
-          style.transition = 'all 1s ease-in-out'
+          style.transition = `all ${resolved.duration}ms ease-in-out`
         return style
       })
       const cleanRouterGuard = router.beforeEach(async () => {
@@ -119,7 +128,7 @@ export function createStarport<T extends Component>(component: T) {
 
   })
 
-  const Proxy = defineComponent({
+  const proxy = defineComponent({
     props: {
       port: {
         type: String,
@@ -161,7 +170,7 @@ export function createStarport<T extends Component>(component: T) {
     },
   })
 
-  const Carrier = defineComponent({
+  const carrier = defineComponent({
     setup() {
       return () => {
         counter.value
@@ -174,7 +183,8 @@ export function createStarport<T extends Component>(component: T) {
   })
 
   return {
-    Carrier,
-    Proxy,
+    carrier,
+    proxy,
+    options,
   }
 }

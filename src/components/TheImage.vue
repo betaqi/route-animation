@@ -5,7 +5,7 @@ defineProps<{
 </script>
 
 <template>
-  <div overflow-hidden transition-all duration-900 wfull hfull>
+  <div overflow-hidden duration-800 wfull hfull>
     <img wfull object-cover block hfull :src="src">
   </div>
 </template>

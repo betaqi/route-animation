@@ -28,7 +28,7 @@ function toggle(event: MouseEvent) {
       {
         duration: 800,
         easing: 'ease-in',
-        pseudoElement: isDark.value ? '::view-transition-old(ro)ot' : '::view-transition-new(root)',
+        pseudoElement: isDark.value ? '::view-transition-old(root)' : '::view-transition-new(root)',
       }
     );
   });

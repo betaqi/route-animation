@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { images } from '~/composables/data'
-import { StarportProxy } from '../../core/index'
+import { Starport } from 'vue-starport'
 defineProps<{
   idx: string
 }>()
@@ -36,11 +36,11 @@ function RestSize() {
       separadas por módulos. En vez de versionar las especificaciones de CSS, la W3C actualmente realiza una captura de
       las ultimas espcificaciones estables de CSS
     </p>
-    <StarportProxy
+    <Starport
       :style="{ width: `${size}px`, height: `${size}px` }"
       :port="idx"
       :attrs="{ class: 'rounded-1/2' }">
       <TheImage :src="images[Number(idx)]" />
-    </StarportProxy>
+    </Starport>
   </div>
 </template>

@@ -2,7 +2,7 @@ import type { UseElementBoundingReturn } from '@vueuse/core'
 import { nanoid } from './utils'
 import type { Ref } from 'vue'
 export function createStarportContext() {
-  const id = ref(nanoid())
+  const id = nanoid()
   const el: Ref<HTMLElement | undefined> = ref()
   let rect: UseElementBoundingReturn = undefined!
 

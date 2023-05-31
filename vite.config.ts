@@ -14,6 +14,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '~/': `${path.resolve(__dirname, 'src')}/`,
+      'vue-starport': path.resolve(__dirname, './core/index.ts')
     },
   },
   plugins: [

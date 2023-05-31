@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { StarportProxy } from '../../core/index'
+import { Starport } from '../../core/index'
 const router = useRoute()
 </script>
 
@@ -9,9 +9,9 @@ const router = useRoute()
       {{ router.path }}
     </div>
     <div>
-      <StarportProxy w-50px h-24px v-if="router.path !== '/'">
+      <Starport w-50px h-24px v-if="router.path !== '/'">
         <Theme />
-      </StarportProxy>
+      </Starport>
     </div>
     <div flex="~ gap-1" justify-center>
       <RouterLink to="/" btn>

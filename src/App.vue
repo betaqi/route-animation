@@ -1,5 +1,5 @@
 <script setup>
-import { StarportCarrier } from '../core/components'
+import { StarportCarrier } from 'vue-starport'
 </script>
 
 <template>

@@ -20,7 +20,10 @@
       "unplugin-vue-macros/macros-global"
     ],
     "paths": {
-      "~/*": ["src/*"]
+      "~/*": ["src/*"],
+      "vue-starport": [
+        "./core/index.ts"
+      ]
     }
   },
   "vueCompilerOptions": {

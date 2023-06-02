@@ -1,12 +1,25 @@
 <script setup lang="ts">
 import { images } from '~/composables/data'
 import { Starport } from 'vue-starport'
+
+const mode = useLocalStorage('image-mode', true)
+const toggle = useToggle(mode)
+
 </script>
 
 <template>
-  <div flex="~ gap-4 wrap" justify-center>
+  <div p5 flex="~ gap-2" justify-center>
+    <button btn @click="toggle()">
+      Toggle Size
+    </button>
+  </div>
+  <div flex="~ wrap" justify-center>
     <RouterLink v-for="(img, idx) in images" :key="idx" :to="`/${idx}`">
-      <Starport :port="String(idx)" w-100 h-50>
+      <Starport
+        :port="String(idx)"
+        :class="mode ? 'w-70 h-30' : 'w-64 h-60 m2'"
+        transition-all duration-800
+        >
         <TheImage :src="img" />
       </Starport>
     </RouterLink>

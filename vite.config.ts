@@ -7,7 +7,6 @@ import Pages from 'vite-plugin-pages'
 import Components from 'unplugin-vue-components/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import Unocss from 'unocss/vite'
-import VueMacros from 'unplugin-vue-macros/vite'
 // import VueDevTools from 'vite-plugin-vue-devtools'
 
 export default defineConfig({
@@ -18,17 +17,21 @@ export default defineConfig({
     },
   },
   plugins: [
-    VueMacros({
-      plugins: {
-        vue: Vue({
-          reactivityTransform: true,
-        }),
-      },
-    }),
+    Vue(),
     // VueDevTools(),
 
     // https://github.com/hannoeru/vite-plugin-pages
-    Pages(),
+    Pages({
+      importMode(filepath, options) {
+        // console.log('====================filepath==================================')
+        // console.log(filepath)
+        // console.log('====================filepath end==================================')
+        // console.log('====================options==================================')
+        // console.log(options)
+        // console.log('====================options end==================================')
+        return 'sync'
+      }
+    }),
 
     // https://github.com/antfu/unplugin-auto-import
     AutoImport({

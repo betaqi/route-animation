@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <RouterLink to="/foo" btn m-3>
+  <RouterLink to="/" btn m-3>
     Back
   </RouterLink>
 </template>

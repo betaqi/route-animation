@@ -39,8 +39,8 @@ function RestSize() {
     <Starport
       :style="{ width: `${size}px`, height: `${size}px` }"
       :port="idx"
-      :attrs="{ class: 'rounded-1/2' }">
-      <TheImage :src="images[Number(idx)]" />
+      >
+      <TheImage :src="images[Number(idx)]" class="rounded-1/2 flow-hidden" />
     </Starport>
   </div>
 </template>

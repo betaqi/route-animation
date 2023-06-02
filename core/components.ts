@@ -1,28 +1,26 @@
 import type { StarportInstance } from './type'
-import { defineComponent, renderList } from 'vue'
+import { defineComponent, isVNode, renderList } from 'vue'
 import { createStarport } from './core'
+import { isObject } from '@vueuse/core'
 
 export const compCarrierMapCounter = ref(0)
-
 export const componetMap = new Map<Component, StarportInstance>()
 
-
-export function getStarportCarrier<T extends Component>(componet: T) {
+function getStarportInstance(componet: Component) {
   if (!componetMap.has(componet)) {
     compCarrierMapCounter.value += 1
     componetMap.set(componet, createStarport(componet))
   }
-  return componetMap.get(componet)!.carrier
+  return componetMap.get(componet)!
 }
 
-export function getStarport<T extends Component>(component: T) {
-  if (!componetMap.has(component)) {
-    compCarrierMapCounter.value += 1
-    componetMap.set(component, createStarport(component))
-  }
-  return componetMap.get(component)!.proxy
+export function getStarportCarrier<T extends Component>(componet: T) {
+  return getStarportInstance(componet).carrier
 }
 
+export function getStarport<T extends Component>(componet: T) {
+  return getStarportInstance(componet).proxy
+}
 
 export const StarportCarrier = defineComponent({
   name: 'StarportCarrier',
@@ -44,15 +42,22 @@ export const Starport = defineComponent({
   },
   setup(props, ctx) {
     return () => {
-      const slot = ctx.slots.default?.()
-      if (!slot)
+      const slots = ctx.slots.default?.()
+      if (!slots)
         throw new Error('Starport requires a slot')
-      if (slot.length !== 1)
-        throw new Error(`Starport requires exactly one slot, but got ${slot.length}`)
 
-      const component = slot[0].type as any
+      if (slots.length !== 1)
+        throw new Error(`Starport requires exactly one slot, but got ${slots.length}`)
+
+      const slot = slots[0]
+      const component = slot.type as any
+
+      // console.log(Object.prototype.toString.call(component) === '[object Object]')
+      if (!isObject(component) || isVNode(component))
+        throw new Error('The slot in Starport must be a component')
+
       const proxy = getStarport(component) as any
-      return h(proxy, { port: props.port, props: slot[0].props })
+      return h(proxy, { port: props.port, props: slot.props })
     }
   }
 })

@@ -83,8 +83,8 @@ export function createStarport<T extends Component>(
 
 
       return () => {
-        const comp = h(component, { ...context.value.props, ...context.value.attr })
-        const teleport = !!(context.value.isLanded && context.value.el)
+        const comp = h(component, context.value.props)
+        const isLanded = !!(context.value.isLanded && context.value.el)
         return h(
           'div', {
           style: Style.value,
@@ -99,7 +99,7 @@ export function createStarport<T extends Component>(
           }
         },
           h(Teleport,
-            { to: teleport ? `#proxy-${context.value.id}` : 'body', disabled: !context.value.isLanded },
+            { to: isLanded ? `#proxy-${context.value.id}` : 'body', disabled: !context.value.isLanded },
             comp
           )
         )
@@ -118,14 +118,9 @@ export function createStarport<T extends Component>(
         type: Object,
         default: () => { }
       },
-      attrs: {
-        type: Object,
-        default: () => { }
-      }
     },
     setup(props, ctx) {
       const context = computed(() => getStarporContext(props.port))
-      context.value.attr = props.attrs
       context.value.props = props.props
       const el = context.value.elRef()
       // 第一次出现直接落地

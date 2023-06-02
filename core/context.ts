@@ -7,7 +7,6 @@ export function createStarportContext() {
   let rect: UseElementBoundingReturn = undefined!
 
   const props: Ref<any> = ref()
-  const attr: Ref<any> = ref()
   const isVisible = ref(false)
   const isLanded: Ref<boolean> = ref(false)
 
@@ -27,7 +26,6 @@ export function createStarportContext() {
   return reactive({
     el,
     props,
-    attr,
     rect,
     scope,
     id,
